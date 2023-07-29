@@ -31,7 +31,7 @@ public class UserController {
 
     @PutMapping("update/{id}")
     public ResponseGeneral<UserResponse>
-    update(@RequestBody UserRequest userRequest, @PathVariable(name = "id") int id) {
+    update(@RequestBody @Valid UserRequest userRequest, @PathVariable(name = "id") int id) {
         return new ResponseGeneral<>(MessageResponse.UPDATE_SUCCESS, userService.update(userRequest, id));
     }
 

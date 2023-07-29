@@ -2,6 +2,7 @@ package com.example.demo.dao;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Objects;
@@ -10,7 +11,6 @@ public class DataSource {
 
     private static HikariConfig config = new HikariConfig();
     private static HikariDataSource ds;
-
     private static DataSource dataSource;
 
     static {
