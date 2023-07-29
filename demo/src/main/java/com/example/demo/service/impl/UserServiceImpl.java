@@ -24,7 +24,7 @@ public class UserServiceImpl implements UserService {
                 userRequest.getUsername(),
                 userRequest.getPassword(),
                 userRequest.getEmail());
-        UserResponse userResponse = new UserResponse(userDAO.create(user)); //
+        UserResponse userResponse = new UserResponse(userDAO.create(user));
         return userResponse;
     }
 
