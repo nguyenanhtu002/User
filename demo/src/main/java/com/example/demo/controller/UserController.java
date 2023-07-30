@@ -32,7 +32,12 @@ public class UserController {
   @PutMapping("update/{id}")
   public ResponseGeneral<UserResponse> update(
         @RequestBody @Valid UserRequest userRequest, @PathVariable(name = "id") int id) {
-    return new ResponseGeneral<>(MessageResponse.UPDATE_SUCCESS, userService.update(userRequest, id));
+    UserResponse updatedUserResponse = userService.update(userRequest, id);
+    if (updatedUserResponse != null) {
+      return new ResponseGeneral<>(MessageResponse.UPDATE_SUCCESS, updatedUserResponse);
+    } else {
+      return new ResponseGeneral<>(MessageResponse.UPDATE_FAIL);
+    }
   }
 
   @GetMapping("/get")

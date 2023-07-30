@@ -9,23 +9,24 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class UserResponse {
-    private int id;
-    private String username;
-    private String email;
+  private int id;
+  private String username;
+  private String email;
 
-    public UserResponse(User user) {
-            this.username = user.getUsername();
-            this.email = user.getEmail();
-    }
+  public UserResponse(User user) {
+    this.id = user.getId();
+    this.username = user.getUsername();
+    this.email = user.getEmail();
+  }
 
-    public UserResponse(String username, String email) {
-        this.username = username;
-        this.email = email;
-    }
+  public UserResponse(String username, String email) {
+    this.username = username;
+    this.email = email;
+  }
 
-    public UserResponse(int id, String username, String email) {
-        this.id = id;
-        this.username = username;
-        this.email = email;
-    }
+  public UserResponse(int id, String username, String email) {
+    this.id = id;
+    this.username = username;
+    this.email = email;
+  }
 }

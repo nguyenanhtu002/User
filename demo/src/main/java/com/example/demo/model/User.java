@@ -5,22 +5,22 @@ import lombok.*;
 @Getter
 @Setter
 public class User {
-    private int id;
-    private String username;
-    private String password;
-    private String email;
+  private int id;
+  private String username;
+  private String password;
+  private String email;
 
-    public User() {
-    }
+  public User() {
+  }
 
-    public User(String username, String password, String email) {
-        this.username = username;
-        this.password = password;
-        this.email = email;
-    }
+  public User(String username, String password, String email) {
+    this.username = username;
+    this.password = password;
+    this.email = email;
+  }
 
-    public User(String username, String password){
-        this.username = username;
-        this.password = password;
-    }
+  public User(String username, String password) {
+    this.username = username;
+    this.password = password;
+  }
 }
