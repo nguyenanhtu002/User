@@ -5,12 +5,11 @@ import com.example.demo.dao.impl.UserDAOImpl;
 import com.example.demo.dto.request.LoginRequest;
 import com.example.demo.dto.request.UserRequest;
 import com.example.demo.dto.response.UserResponse;
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import org.springframework.stereotype.Service;
 
-import javax.validation.Valid;
-import java.sql.SQLException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class UserServiceImpl implements UserService {
     private final UserDAO userDAO= new UserDAOImpl();
 
     @Override
-    public UserResponse create(@Valid UserRequest userRequest) {
+    public UserResponse create( UserRequest userRequest) {
         User user = new User(
                 userRequest.getUsername(),
                 userRequest.getPassword(),
@@ -29,7 +28,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse update( @Valid UserRequest userRequest, int id) {
+    public UserResponse update(UserRequest userRequest, int id) {
         User userUpdate = new User(
                 userRequest.getUsername(),
                 userRequest.getPassword(),

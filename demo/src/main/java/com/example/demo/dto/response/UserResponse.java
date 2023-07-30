@@ -1,6 +1,6 @@
 package com.example.demo.dto.response;
 
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,7 +14,6 @@ public class UserResponse {
     private String email;
 
     public UserResponse(User user) {
-            this.id = user.getId();
             this.username = user.getUsername();
             this.email = user.getEmail();
     }

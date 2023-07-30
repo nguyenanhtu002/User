@@ -2,7 +2,7 @@ package com.example.demo.dao.impl;
 
 import com.example.demo.dao.DataSource;
 import com.example.demo.dao.UserDAO;
-import com.example.demo.entity.User;
+import com.example.demo.model.User;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
