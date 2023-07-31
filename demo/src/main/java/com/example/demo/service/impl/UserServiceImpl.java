@@ -99,6 +99,7 @@ public class UserServiceImpl implements UserService {
       throw new AuthenticationException();
     } else {
       User getUser = userDAO.getByUsername(loginRequest.getUsername());
+      logger.log(Level.INFO, "User logged in successfully: {0}", getUser.getUsername());
       return new LoginResponse(getUser.getId(), getUser.getUsername(), getUser.getEmail());
     }
   }
