@@ -7,5 +7,6 @@ public class MessageResponse {
   public static final String LOGIN_SUCCESS = "Login success";
   public static final String UPDATE_SUCCESS = "Update success";
   public static final String LOGIN_FAIL = "Login failure";
-  public static final String UPDATE_FAIL = "Update failure";
+  public static final String USER_NOT_FOUND = "User not found ";
+  public static final String INVALID = "Invalid username or password";
 }

@@ -14,7 +14,6 @@ public class UserDAOImpl implements UserDAO {
   private static final String UPDATE_USER = "UPDATE users SET username=?,password=?,email=? WHERE id=?";
   private static final String DELETE_USER = "DELETE FROM users WHERE id = ?";
   private static final String GET_ALL = "SELECT id, username,password, email FROM Users";
-  private static final String CHECK_USER = "SELECT * FROM users WHERE username = ?";
   private static final String GET_BY_USERNAME = "SELECT * FROM users WHERE username=?";
   private static final String GET_BY_ID = "SELECT * FROM users WHERE id=?";
 
@@ -151,7 +150,7 @@ public class UserDAOImpl implements UserDAO {
   }
 
   @Override
-  public List<User> getAll() {
+  public List<User> list() {
     List<User> list = new ArrayList<>();
     Connection conn = null;
     try {
@@ -190,7 +189,7 @@ public class UserDAOImpl implements UserDAO {
     Connection conn = null;
     try {
       conn = DataSource.getInstance().getConnection();
-      PreparedStatement ps = conn.prepareStatement(CHECK_USER);
+      PreparedStatement ps = conn.prepareStatement(GET_BY_USERNAME);
       ps.setString(1, user.getUsername());
       ResultSet rs = ps.executeQuery();
 

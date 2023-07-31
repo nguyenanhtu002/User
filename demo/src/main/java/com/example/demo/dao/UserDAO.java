@@ -13,7 +13,7 @@ public interface UserDAO {
 
   User getByUsername(String username);
 
-  List<User> getAll();
+  List<User> list();
 
   User login(User user);
 

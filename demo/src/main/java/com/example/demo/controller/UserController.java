@@ -3,18 +3,18 @@ package com.example.demo.controller;
 import com.example.demo.constant.MessageResponse;
 import com.example.demo.dto.request.LoginRequest;
 import com.example.demo.dto.request.UserRequest;
+import com.example.demo.dto.response.LoginResponse;
 import com.example.demo.dto.response.ResponseGeneral;
 import com.example.demo.dto.response.UserResponse;
 import com.example.demo.service.UserService;
-import org.springframework.validation.annotation.Validated;
+import com.example.demo.util.TokenUtil;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
 import jakarta.validation.Valid;
 
 import java.util.List;
 
 @RestController
-@Validated
 @RequestMapping("api/v1/users")
 public class UserController {
   private final UserService userService;
@@ -23,42 +23,38 @@ public class UserController {
     this.userService = userService;
   }
 
-  @PostMapping("/create")
+  @PostMapping("")
   public ResponseGeneral<UserResponse> create(
         @RequestBody @Valid UserRequest userRequest) {
-    return new ResponseGeneral<>(MessageResponse.CREATE_USER, userService.create(userRequest));
+    UserResponse userResponse = userService.create(userRequest);
+    return new ResponseGeneral<>(MessageResponse.CREATE_USER, userResponse, HttpStatus.CREATED.value());
   }
 
-  @PutMapping("update/{id}")
+  @PutMapping("/id")
   public ResponseGeneral<UserResponse> update(
         @RequestBody @Valid UserRequest userRequest, @PathVariable(name = "id") int id) {
-    UserResponse updatedUserResponse = userService.update(userRequest, id);
-    if (updatedUserResponse != null) {
-      return new ResponseGeneral<>(MessageResponse.UPDATE_SUCCESS, updatedUserResponse);
-    } else {
-      return new ResponseGeneral<>(MessageResponse.UPDATE_FAIL);
-    }
+    UserResponse user = userService.update(userRequest, id);
+    return new ResponseGeneral<>(MessageResponse.UPDATE_SUCCESS, user, HttpStatus.OK.value());
   }
 
-  @GetMapping("/get")
-  public ResponseGeneral<List<UserResponse>> get() {
-    List<UserResponse> users = userService.getAll();
-    return new ResponseGeneral<>(MessageResponse.GET_USER, users);
+
+  @GetMapping("/")
+  public ResponseGeneral<List<UserResponse>> list() {
+    List<UserResponse> users = userService.list();
+    return new ResponseGeneral<>(MessageResponse.GET_USER, users, HttpStatus.OK.value());
   }
 
-  @DeleteMapping("/delete/{id}")
+  @DeleteMapping("/id")
   public ResponseGeneral<Void> delete(@PathVariable(name = "id") int id) {
     userService.delete(id);
-    return new ResponseGeneral<>(MessageResponse.DELETE_USER);
+    return new ResponseGeneral<>(MessageResponse.DELETE_USER, HttpStatus.OK.value());
   }
 
   @PostMapping("/login")
-  public ResponseGeneral<UserResponse> login(@RequestBody LoginRequest loginRequest) {
-    UserResponse user = userService.login(loginRequest);
-    if (user != null) {
-      return new ResponseGeneral<>(MessageResponse.LOGIN_SUCCESS, user);
-    } else {
-      return new ResponseGeneral<>(MessageResponse.LOGIN_FAIL);
-    }
+  public ResponseGeneral<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
+    LoginResponse user = userService.login(loginRequest);
+    String token = TokenUtil.generateToken();
+    user.setToken(token);
+    return new ResponseGeneral<>(MessageResponse.LOGIN_SUCCESS, user, HttpStatus.OK.value());
   }
 }

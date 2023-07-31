@@ -4,7 +4,10 @@ import com.example.demo.dao.UserDAO;
 import com.example.demo.dao.impl.UserDAOImpl;
 import com.example.demo.dto.request.LoginRequest;
 import com.example.demo.dto.request.UserRequest;
+import com.example.demo.dto.response.LoginResponse;
 import com.example.demo.dto.response.UserResponse;
+import com.example.demo.exception.AuthenticationException;
+import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
 import org.springframework.stereotype.Service;
@@ -22,7 +25,8 @@ public class UserServiceImpl implements UserService {
           userRequest.getUsername(),
           userRequest.getPassword(),
           userRequest.getEmail());
-    UserResponse userResponse = new UserResponse(userDAO.create(user));
+    userDAO.create(user);
+    UserResponse userResponse = new UserResponse(user.getId(), user.getUsername(), user.getEmail());
     return userResponse;
   }
 
@@ -33,12 +37,14 @@ public class UserServiceImpl implements UserService {
       existingUser.setUsername(userRequest.getUsername());
       existingUser.setPassword(userRequest.getPassword());
       existingUser.setEmail(userRequest.getEmail());
-
       User updatedUser = userDAO.update(existingUser, id);
-      UserResponse userResponse = new UserResponse(updatedUser);
+      UserResponse userResponse = new UserResponse(
+            updatedUser.getId(),
+            updatedUser.getUsername(),
+            updatedUser.getEmail());
       return userResponse;
     } else {
-      return null;
+      throw new NotFoundException();
     }
   }
 
@@ -48,8 +54,8 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<UserResponse> getAll() {
-    List<User> users = userDAO.getAll();
+  public List<UserResponse> list() {
+    List<User> users = userDAO.list();
     List<UserResponse> usersResponse = new ArrayList<>();
     int id;
     String username, email;
@@ -66,17 +72,22 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserResponse getByUsername(String username) {
-    UserResponse userResponse = new UserResponse(userDAO.getByUsername(username));
+    User user = userDAO.getByUsername(username);
+    UserResponse userResponse = new UserResponse(
+          user.getId(),
+          user.getUsername(),
+          user.getEmail());
     return userResponse;
   }
 
-  public UserResponse login(LoginRequest loginRequest) {
+  public LoginResponse login(LoginRequest loginRequest) {
     User user = new User(loginRequest.getUsername(), loginRequest.getPassword());
     User loggedInUser = userDAO.login(user);
-    if (loggedInUser != null) {
-      return new UserResponse(loggedInUser.getUsername(), loggedInUser.getEmail());
+    if (loggedInUser == null) {
+      throw new AuthenticationException();
     } else {
-      return null;
+      User getUser = userDAO.getByUsername(loginRequest.getUsername());
+      return new LoginResponse(getUser.getId(), getUser.getUsername(), getUser.getEmail());
     }
   }
 
