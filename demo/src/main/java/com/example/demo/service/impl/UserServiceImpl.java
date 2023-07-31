@@ -14,13 +14,18 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Service
 public class UserServiceImpl implements UserService {
   private final UserDAO userDAO = new UserDAOImpl();
+  private static final Logger logger = Logger.getLogger(UserServiceImpl.class.getName());
 
   @Override
   public UserResponse create(UserRequest userRequest) {
+    logger.log(Level.INFO, "Creating a new user: {0}", userRequest.getUsername());
+
     User user = new User(
           userRequest.getUsername(),
           userRequest.getPassword(),
@@ -32,6 +37,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserResponse update(UserRequest userRequest, int id) {
+    logger.log(Level.INFO, "Updating user with ID: {0}", id);
+
     User existingUser = userDAO.getById(id);
     if (existingUser != null) {
       existingUser.setUsername(userRequest.getUsername());
@@ -44,17 +51,22 @@ public class UserServiceImpl implements UserService {
             updatedUser.getEmail());
       return userResponse;
     } else {
+      logger.log(Level.WARNING, "User not found with ID: {0}", id);
       throw new NotFoundException();
     }
   }
 
   @Override
   public void delete(int id) {
+    logger.log(Level.INFO, "Deleting user with ID: {0}", id);
+
     userDAO.delete(id);
   }
 
   @Override
   public List<UserResponse> list() {
+    logger.log(Level.INFO, "Retrieving all users");
+
     List<User> users = userDAO.list();
     List<UserResponse> usersResponse = new ArrayList<>();
     int id;
@@ -72,6 +84,8 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public UserResponse getByUsername(String username) {
+    logger.log(Level.INFO, "Retrieving user with username: {0}", username);
+
     User user = userDAO.getByUsername(username);
     UserResponse userResponse = new UserResponse(
           user.getId(),
@@ -81,14 +95,16 @@ public class UserServiceImpl implements UserService {
   }
 
   public LoginResponse login(LoginRequest loginRequest) {
+    logger.log(Level.INFO, "Processing login request for user: {0}", loginRequest.getUsername());
+
     User user = new User(loginRequest.getUsername(), loginRequest.getPassword());
     User loggedInUser = userDAO.login(user);
     if (loggedInUser == null) {
+      logger.log(Level.WARNING, "Authentication failed for user: {0}", loginRequest.getUsername());
       throw new AuthenticationException();
     } else {
       User getUser = userDAO.getByUsername(loginRequest.getUsername());
       return new LoginResponse(getUser.getId(), getUser.getUsername(), getUser.getEmail());
     }
   }
-
 }
