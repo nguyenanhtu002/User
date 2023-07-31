@@ -59,8 +59,6 @@ public class UserController {
   @PostMapping("/login")
   public ResponseGeneral<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
     LoginResponse user = userService.login(loginRequest);
-    String token = TokenUtil.generateToken();
-    user.setToken(token);
     log.info("(login) User logged in successfully: {}", user.getUsername());
     return new ResponseGeneral<>(MessageResponse.LOGIN_SUCCESS, user, HttpStatus.OK.value());
   }

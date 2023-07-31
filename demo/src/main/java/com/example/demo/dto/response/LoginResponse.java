@@ -15,10 +15,11 @@ public class LoginResponse {
       this.username = username;
       this.email = email;
     }
-  public LoginResponse(int id, String username, String email) {
+  public LoginResponse(int id, String username, String email, String token) {
     this.id = id;
     this.username = username;
     this.email = email;
+    this.token = token;
   }
   }
 

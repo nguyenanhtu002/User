@@ -10,6 +10,7 @@ import com.example.demo.exception.AuthenticationException;
 import com.example.demo.exception.NotFoundException;
 import com.example.demo.model.User;
 import com.example.demo.service.UserService;
+import com.example.demo.util.TokenUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -98,9 +99,11 @@ public class UserServiceImpl implements UserService {
       logger.log(Level.WARNING, "Authentication failed for user: {0}", loginRequest.getUsername());
       throw new AuthenticationException();
     } else {
+      String token = TokenUtil.generateToken();
+      user.setToken(token);
       User getUser = userDAO.getByUsername(loginRequest.getUsername());
       logger.log(Level.INFO, "User logged in successfully: {0}", getUser.getUsername());
-      return new LoginResponse(getUser.getId(), getUser.getUsername(), getUser.getEmail());
+      return new LoginResponse(getUser.getId(), getUser.getUsername(), getUser.getEmail(),token);
     }
   }
 }
