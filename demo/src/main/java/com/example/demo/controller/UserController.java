@@ -47,7 +47,6 @@ public class UserController {
   public ResponseGeneral<List<UserResponse>> list() {
     log.info("(list) Request to get all users.");
     List<UserResponse> users = userService.list();
-    log.info("(list) Retrieved {} users: {}", users.size(), users);
     return new ResponseGeneral<>(MessageResponse.GET_USER, users, HttpStatus.OK.value());
   }
 
@@ -55,7 +54,6 @@ public class UserController {
   public ResponseGeneral<Void> delete(@PathVariable(name = "id") int id) {
     log.info("(delete) Request to delete user with id: {}", id);
     userService.delete(id);
-    log.info("(delete) User with id {} deleted successfully.", id);
     return new ResponseGeneral<>(MessageResponse.DELETE_USER, HttpStatus.OK.value());
   }
 
