@@ -34,14 +34,13 @@ public class UserController {
     return new ResponseGeneral<>(MessageResponse.CREATE_USER, userResponse, HttpStatus.CREATED.value());
   }
 
-  @PutMapping("/id")
+  @PutMapping("/{id}")
   public ResponseGeneral<UserResponse> update(
         @RequestBody @Valid UserRequest userRequest, @PathVariable(name = "id") int id) {
     log.info("(update) Request to update user with id {}: {}", id, userRequest);
     UserResponse user = userService.update(userRequest, id);
     return new ResponseGeneral<>(MessageResponse.UPDATE_SUCCESS, user, HttpStatus.OK.value());
   }
-
 
   @GetMapping("/")
   public ResponseGeneral<List<UserResponse>> list() {
@@ -50,7 +49,7 @@ public class UserController {
     return new ResponseGeneral<>(MessageResponse.GET_USER, users, HttpStatus.OK.value());
   }
 
-  @DeleteMapping("/id")
+  @DeleteMapping("/{id}")
   public ResponseGeneral<Void> delete(@PathVariable(name = "id") int id) {
     log.info("(delete) Request to delete user with id: {}", id);
     userService.delete(id);
