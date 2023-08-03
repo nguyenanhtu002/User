@@ -17,17 +17,12 @@ public class ResponseGeneral<T> {
     this.statusCode = statusCode;
     this.data = data;
   }
-
   public ResponseGeneral(String message, int statusCode) {
     this(message, null, statusCode);
   }
 
-  public ResponseGeneral(String message, T data) {
-    this(message, data, HttpStatus.OK.value());
-  }
-
-  public ResponseGeneral(String message) {
-    this(message, null, HttpStatus.OK.value());
+  public static <T> ResponseGeneral<T> ofCreated(String message, T data) {
+    return new ResponseGeneral<>(message, data, HttpStatus.CREATED.value());
   }
 
 }

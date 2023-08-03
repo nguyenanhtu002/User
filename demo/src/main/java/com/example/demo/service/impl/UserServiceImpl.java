@@ -67,14 +67,9 @@ public class UserServiceImpl implements UserService {
     logger.log(Level.INFO, "Retrieving all users");
     List<User> users = userDAO.list();
     List<UserResponse> usersResponse = new ArrayList<>();
-    int id;
-    String username, email;
     UserResponse userResponse;
     for (User user : users) {
-      id = user.getId();
-      username = user.getUsername();
-      email = user.getEmail();
-      userResponse = new UserResponse(id, username, email);
+      userResponse = new UserResponse(user.getId(), user.getUsername(), user.getUsername());
       usersResponse.add(userResponse);
     }
     return usersResponse;
@@ -103,7 +98,7 @@ public class UserServiceImpl implements UserService {
       user.setToken(token);
       User getUser = userDAO.getByUsername(loginRequest.getUsername());
       logger.log(Level.INFO, "User logged in successfully: {0}", getUser.getUsername());
-      return new LoginResponse(getUser.getId(), getUser.getUsername(), getUser.getEmail(),token);
+      return new LoginResponse(getUser.getId(), getUser.getUsername(), getUser.getEmail(), token);
     }
   }
 }

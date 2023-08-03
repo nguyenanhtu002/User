@@ -7,7 +7,6 @@ import com.example.demo.dto.response.LoginResponse;
 import com.example.demo.dto.response.ResponseGeneral;
 import com.example.demo.dto.response.UserResponse;
 import com.example.demo.service.UserService;
-import com.example.demo.util.TokenUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -27,11 +26,10 @@ public class UserController {
   }
 
   @PostMapping("")
-  public ResponseGeneral<UserResponse> create(
-        @RequestBody @Valid UserRequest userRequest) {
+  public ResponseGeneral<UserResponse> create(@RequestBody @Valid UserRequest userRequest) {
     log.info("(create) request: {}", userRequest);
     UserResponse userResponse = userService.create(userRequest);
-    return new ResponseGeneral<>(MessageResponse.CREATE_USER, userResponse, HttpStatus.CREATED.value());
+    return ResponseGeneral.ofCreated(MessageResponse.CREATE_USER, userResponse);
   }
 
   @PutMapping("/{id}")
@@ -42,7 +40,7 @@ public class UserController {
     return new ResponseGeneral<>(MessageResponse.UPDATE_SUCCESS, user, HttpStatus.OK.value());
   }
 
-  @GetMapping("/")
+  @GetMapping("")
   public ResponseGeneral<List<UserResponse>> list() {
     log.info("(list) Request to get all users.");
     List<UserResponse> users = userService.list();
