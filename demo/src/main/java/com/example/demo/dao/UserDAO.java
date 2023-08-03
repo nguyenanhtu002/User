@@ -15,7 +15,5 @@ public interface UserDAO {
 
   List<User> list();
 
-  User login(User user);
-
   User getById(int id);
 }

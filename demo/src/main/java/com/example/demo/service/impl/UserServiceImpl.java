@@ -86,19 +86,23 @@ public class UserServiceImpl implements UserService {
     return userResponse;
   }
 
+  @Override
   public LoginResponse login(LoginRequest loginRequest) {
     logger.log(Level.INFO, "Processing login request for user: {0}", loginRequest.getUsername());
-    User user = new User(loginRequest.getUsername(), loginRequest.getPassword());
-    User loggedInUser = userDAO.login(user);
-    if (loggedInUser == null) {
+    User existingUser = userDAO.getByUsername(loginRequest.getUsername());
+    if (existingUser == null) {
+      logger.log(Level.WARNING, "User not found for login: {0}", loginRequest.getUsername());
+      throw new NotFoundException();
+    }
+    if (!loginRequest.getPassword().equals(existingUser.getPassword())) {
       logger.log(Level.WARNING, "Authentication failed for user: {0}", loginRequest.getUsername());
       throw new AuthenticationException();
-    } else {
-      String token = TokenUtil.generateToken();
-      user.setToken(token);
-      User getUser = userDAO.getByUsername(loginRequest.getUsername());
-      logger.log(Level.INFO, "User logged in successfully: {0}", getUser.getUsername());
-      return new LoginResponse(getUser.getId(), getUser.getUsername(), getUser.getEmail(), token);
     }
+    String token = TokenUtil.generateToken();
+    existingUser.setToken(token);
+    logger.log(Level.INFO, "User logged in successfully: {0}", existingUser.getUsername());
+    return new LoginResponse(existingUser.getId(), existingUser.getUsername(), existingUser.getEmail(), token);
   }
+
+
 }

@@ -185,44 +185,6 @@ public class UserDAOImpl implements UserDAO {
     return list;
   }
 
-  public User login(User user) {
-    Connection conn = null;
-    try {
-      conn = DataSource.getInstance().getConnection();
-      PreparedStatement ps = conn.prepareStatement(GET_BY_USERNAME);
-      ps.setString(1, user.getUsername());
-      ResultSet rs = ps.executeQuery();
-
-      if (rs.next()) {
-        int id = rs.getInt("id");
-        String dbUsername = rs.getString("username");
-        String dbPassword = rs.getString("password");
-        String email = rs.getString("email");
-
-        if (user.getPassword().equals(dbPassword)) {
-          user.setId(id);
-          user.setUsername(dbUsername);
-          user.setEmail(email);
-        } else {
-          user = null;
-        }
-      } else {
-        user = null;
-      }
-    } catch (SQLException e) {
-      e.printStackTrace();
-    } finally {
-      if (conn != null) {
-        try {
-          conn.close();
-        } catch (SQLException e) {
-          e.printStackTrace();
-        }
-      }
-    }
-    return user;
-  }
-
   @Override
   public User getById(int id) {
     Connection conn = null;
