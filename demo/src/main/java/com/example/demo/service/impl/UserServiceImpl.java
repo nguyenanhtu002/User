@@ -103,6 +103,4 @@ public class UserServiceImpl implements UserService {
     logger.log(Level.INFO, "User logged in successfully: {0}", existingUser.getUsername());
     return new LoginResponse(existingUser.getId(), existingUser.getUsername(), existingUser.getEmail(), token);
   }
-
-
 }
